@@ -2,6 +2,8 @@ package org.example.criptobot;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.client.WebSocketConnectionManager;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -29,24 +31,35 @@ public class CryptoBot extends TelegramLongPollingBot {
             String messageText = update.getMessage().getText();
             Long chatId = update.getMessage().getChatId();
 
-            // пока что нет необходимости знать от кого пришол запрос
-            // String memberName = update.getMessage().getFrom().toString();
-
-            String response;
-
             if (messageText.equals("/start")) {
-                response = "Hello, wich currency do you want to know?" + "\nBTC\nETH\nSOL\nDOGE";
+                sendMessage(chatId, "Hello, wich currency do you want to know?" + "\nBTC\nETH\nSOL\nDOGE");
             } else {
-                response = cryptoService.getCryptoPrice(messageText.toUpperCase());
+                getPriceWebSocket(chatId, messageText);
             }
-
-            sendMessage(chatId, response);
         }
     }
 
     @Override
     public String getBotUsername() {
         return botConfiguration.getBotName();
+    }
+
+    public void getPriceWebSocket(Long chatId, String symbol){
+        StandardWebSocketClient client = new StandardWebSocketClient();
+
+        WebSocketConnectionManager connectionManager = new WebSocketConnectionManager(
+                client,
+                new CryptoWebSocketHandler(cryptoService),
+                "ws://localhost:8080/crypto-price");
+
+        connectionManager.start();
+
+        try {
+            String response = cryptoService.getCryptoPrice(symbol);
+            sendMessage(chatId, response);
+        } finally {
+            connectionManager.stop();
+        }
     }
 
     private void sendMessage(Long chatId, String text){

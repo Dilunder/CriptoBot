@@ -8,8 +8,14 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
+    private CryptoWebSocketHandler webSocketHandler;
+
+    public WebSocketConfig(CryptoWebSocketHandler webSocketHandler) {
+        this.webSocketHandler = webSocketHandler;
+    }
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-
+        registry.addHandler(webSocketHandler, "crypto-price").setAllowedOrigins("*");
     }
 }

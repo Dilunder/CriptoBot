@@ -23,7 +23,6 @@ public class InitializeBot {
             telegramBotsApi.registerBot(cryptoBot);
             System.out.println("Bot registered successfully.");
 
-            // Проверка существования вебхука
             GetWebhookInfo getWebhookInfo = new GetWebhookInfo();
             WebhookInfo webhookInfo = cryptoBot.execute(getWebhookInfo);
             if (webhookInfo != null && webhookInfo.getUrl() != null) {
@@ -33,7 +32,7 @@ public class InitializeBot {
             }
         } catch (TelegramApiException e) {
             if (e.getMessage().contains("Error removing old webhook")) {
-                // Игнорируем ошибку, если вебхук не существует
+
                 System.out.println("Webhook does not exist, continuing...");
             } else {
                 throw new RuntimeException(e);
