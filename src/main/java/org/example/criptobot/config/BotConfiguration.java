@@ -1,4 +1,4 @@
-package org.example.criptobot;
+package org.example.criptobot.config;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,5 +1,6 @@
-package org.example.criptobot;
+package org.example.criptobot.initializer;
 
+import org.example.criptobot.pojo.CryptoBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;

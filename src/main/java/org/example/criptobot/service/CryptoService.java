@@ -1,6 +1,7 @@
-package org.example.criptobot;
+package org.example.criptobot.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,6 +12,7 @@ public class CryptoService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Cacheable(value = "CryptoPrice", key = "#symbol.toUpperCase()")
     public String getCryptoPrice(String symbol){
         try{
             String response = restTemplate.getForObject(API_URL + getBinanceId(symbol), String.class);

@@ -1,5 +1,6 @@
-package org.example.criptobot;
+package org.example.criptobot.handler;
 
+import org.example.criptobot.service.CryptoService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;

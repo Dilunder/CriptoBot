@@ -1,5 +1,6 @@
-package org.example.criptobot;
+package org.example.criptobot.config;
 
+import org.example.criptobot.handler.CryptoWebSocketHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
