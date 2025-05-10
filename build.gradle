@@ -42,7 +42,10 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind")
 
     // Логирование
-    implementation("org.springframework.boot:spring-boot-starter-logging")
+    //implementation("org.springframework.boot:spring-boot-starter-logging")
+
+    //scheduler
+    implementation("org.springframework.boot:spring-boot-starter-quartz")
 
     // Для тестирования (опционально)
     testImplementation("org.springframework.boot:spring-boot-starter-test")

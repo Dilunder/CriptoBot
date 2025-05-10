@@ -1,7 +1,7 @@
-package org.example.criptobot.pojo;
+package org.example.criptobot.component;
 
 import org.example.criptobot.handler.CryptoWebSocketHandler;
-import org.example.criptobot.config.BotConfiguration;
+import org.example.criptobot.config.tgbot.BotConfiguration;
 import org.example.criptobot.service.CryptoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

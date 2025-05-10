@@ -1,16 +1,17 @@
 package org.example.criptobot.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@RequiredArgsConstructor
 public class CryptoService {
-
     private final String API_URL = "https://api.binance.com/api/v3/ticker/price?symbol=";
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
     @Cacheable(value = "CryptoPrice", key = "#symbol.toUpperCase()")
     public String getCryptoPrice(String symbol){
@@ -23,7 +24,6 @@ public class CryptoService {
                     .asText();
 
             return String.format("%s: %s", getBinanceId(symbol), price) + " usd";
-
         } catch (Exception e){
             return "Error while trying to get final currency value";
         }
@@ -34,16 +34,7 @@ public class CryptoService {
         symbol = symbol.toUpperCase();
 
         switch (symbol){
-            case "BTC" -> {
-                return symbol + "USDT";
-            }
-            case "ETH" -> {
-                return symbol + "USDT";
-            }
-            case "SOL" -> {
-                return symbol + "USDT";
-            }
-            case "DOGE" -> {
+            case "BTC", "ETH", "SOL", "DOGE" -> {
                 return symbol + "USDT";
             }
             default -> {

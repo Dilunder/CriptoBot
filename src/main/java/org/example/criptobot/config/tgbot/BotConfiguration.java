@@ -1,4 +1,4 @@
-package org.example.criptobot.config;
+package org.example.criptobot.config.tgbot;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
