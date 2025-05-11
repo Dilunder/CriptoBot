@@ -2,13 +2,12 @@ package org.example.criptobot.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.example.criptobot.coins.Coin;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 @Service
 @EnableScheduling
@@ -38,13 +37,11 @@ public class CryptoService {
 
         symbol = symbol.toUpperCase();
 
-        switch (symbol){
-            case "BTC", "ETH", "SOL", "DOGE" -> {
-                return symbol + "USDT";
-            }
-            default -> {
-                return "Coin Not Found";
-            }
+        try {
+            Coin coin = Coin.valueOf(symbol);
+            return coin.name() + "USDT";
+        } catch (IllegalArgumentException e) {
+            return "Coin Not Found";
         }
     }
 

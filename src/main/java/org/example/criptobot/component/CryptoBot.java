@@ -1,9 +1,11 @@
 package org.example.criptobot.component;
 
+import org.example.criptobot.coins.Coin;
 import org.example.criptobot.handler.CryptoWebSocketHandler;
 import org.example.criptobot.config.tgbot.BotConfiguration;
 import org.example.criptobot.service.CryptoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -27,7 +29,6 @@ public class CryptoBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
         System.out.println("Received update: " + update);
 
         if (update.hasMessage() && update.getMessage().hasText()) {
@@ -35,12 +36,39 @@ public class CryptoBot extends TelegramLongPollingBot {
             Long chatId = update.getMessage().getChatId();
 
             if (messageText.equals("/start")) {
-                sendMessage(chatId, "Hello, wich currency do you want to know?" + "\nBTC\nETH\nSOL\nDOGE");
+
+                StringBuilder coinsList = new StringBuilder("Hello, which currency do you want to know?\n");
+
+                for (Coin coin : Coin.values()) {
+                    coinsList.append(coin.name()).append("\n");
+                }
+                sendMessage(chatId, coinsList.toString());
             } else {
                 getPriceWebSocket(chatId, messageText);
             }
         }
     }
+
+    @Scheduled(fixedDelay = 10000)
+    public void updateCoin() {
+        cryptoService.evictAllCacheValues();
+
+        for (Coin coin : Coin.values()) {
+            cryptoService.getCryptoPrice(coin.name().toLowerCase());
+        }
+    }
+
+    public String getBinanceId(String symbol) {
+        symbol = symbol.toUpperCase();
+
+        try {
+            Coin coin = Coin.valueOf(symbol);
+            return coin.name() + "USDT";
+        } catch (IllegalArgumentException e) {
+            return "Coin Not Found";
+        }
+    }
+
 
     @Override
     public String getBotUsername() {

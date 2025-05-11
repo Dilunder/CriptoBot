@@ -1,6 +1,7 @@
 package org.example.criptobot.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.criptobot.coins.Coin;
 import org.example.criptobot.service.CryptoPriceService;
 import org.example.criptobot.service.CryptoService;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +32,8 @@ public class CryptoController {
 
         cryptoService.evictAllCacheValues();
 
-        cryptoService.getCryptoPrice("btc");
-        cryptoService.getCryptoPrice("eth");
-        cryptoService.getCryptoPrice("sol");
-        cryptoService.getCryptoPrice("doge");
+        for (Coin coin : Coin.values()) {
+            cryptoService.getCryptoPrice(coin.name().toLowerCase());
+        }
     }
 }

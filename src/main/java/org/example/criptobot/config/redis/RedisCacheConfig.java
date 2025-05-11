@@ -22,4 +22,3 @@ public class RedisCacheConfig {
                         .fromSerializer(new GenericJackson2JsonRedisSerializer()));
     }
 }
-
