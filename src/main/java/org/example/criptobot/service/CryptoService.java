@@ -2,11 +2,16 @@ package org.example.criptobot.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 @Service
+@EnableScheduling
 @RequiredArgsConstructor
 public class CryptoService {
     private final String API_URL = "https://api.binance.com/api/v3/ticker/price?symbol=";
@@ -41,5 +46,9 @@ public class CryptoService {
                 return "Coin Not Found";
             }
         }
+    }
+
+    @CacheEvict(value = "CryptoPrice", allEntries = true)
+    public void evictAllCacheValues(){
     }
 }

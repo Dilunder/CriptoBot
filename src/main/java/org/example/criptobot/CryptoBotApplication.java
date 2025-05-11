@@ -9,5 +9,3 @@ public class CryptoBotApplication {
         SpringApplication.run(CryptoBotApplication.class, args);
     }
 }
-
-// sheduller - для обновления кеша и reddis
